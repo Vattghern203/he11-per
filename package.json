@@ -1,0 +1,21 @@
+{
+  "name": "he11-per",
+  "version": "1.0.0",
+  "description": "A simple discord bot to help you",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node src/index.js",
+    "deploy:commands": "node src/deploy-commands.js"
+  },
+  "keywords": [
+    "dicord",
+    "bot",
+    "js"
+  ],
+  "author": "vattghern203",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^14.7.1",
+    "dotenv": "^16.0.3"
+  }
+}
