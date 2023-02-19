@@ -1,5 +1,3 @@
-const { docsHandler } = require('../src/handlers/docsHandler')
-
 const { Client, Events, GatewayIntentBits, Collection } = require('discord.js');
 const dotenv = require('dotenv')
 
@@ -10,11 +8,14 @@ const { TOKEN, CLIENT_ID, GUILD_ID } = process.env
 const fs = require('node:fs')
 const path = require('node:path')
 
-const commandsPath = path.join(__dirname, "commands")
-const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith(".js"))
 
+// Instance of a new Client.
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 client.commands = new Collection()
+
+// Command Handler
+const commandsPath = path.join(__dirname, "commands")
+const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith(".js"))
 
 for (const file of commandFiles) {
     const filePath = path.join(commandsPath, file)
@@ -32,50 +33,25 @@ for (const file of commandFiles) {
     }
 }
 
-console.log(client.commands)
+// Event Handler
+const eventsPath = path.join(__dirname, 'events');
+const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'))
 
-// Create a new client instance
+for (const file of eventFiles) {
 
-// When the client is ready, run this code (only once)
-// We use 'c' for the event parameter to keep it separate from the already defined 'client'
-client.once(Events.ClientReady, c => {
-	console.log(`Ready! Logged in as ${c.user.tag}`);
-});
+    const filePath = path.join(eventsPath, file)
+    const event = require(filePath)
+
+    if (event.once) {
+
+        client.once(event.name, (...args) => event.execute(...args))
+    
+    } else {
+
+        client.on(event.name, (...args) => event.execute(...args))
+    }
+}
+
 
 // Log in to Discord with your client's token
 client.login(TOKEN);
-
-// Listener of interactions
-client.on(Events.InteractionCreate, async interaction => {
-
-    if (interaction.isStringSelectMenu()) {
-
-        const selectedTech = interaction.values[0]
-
-        await interaction.reply(docsHandler(selectedTech))
-    }
-    
-    if (!interaction.isChatInputCommand()) return
-
-    const command = interaction.client.commands.get(interaction.commandName)
-
-    if (!command) {
-
-        console.error("Command not found :/")
-
-        return
-    }
-
-    try {
-
-        await command.execute(interaction)
-
-    } catch (error) {
-
-        await interaction.reply(`There's a error while executing this command: ${command}`)
-        console.error(error)
-    }
-
-    console.log(interaction)
-
-})

@@ -30,26 +30,28 @@ const techs = [
     }
 ]
 
-module.exports = {
+module.exports.docsHandler = 
+    
+    function docsHandler(selected) {
+    
+        for (let idx in techs) {
 
-    docsHandler:
-        function docsHandler(selected) {
-            
-            selected.toString()
-        
-            if (techs.includes(selected)) {
-        
-                for (const idx in techs) {
-        
-                    if (techs[idx].name === selected) {
-        
-                        return toString(techs[idx].url)
-                    }
+            try {
+
+                if (techs[idx].name == selected) {
+    
+                    console.log(techs[idx])
+    
+                    return techs[idx].url
+                
                 }
-        
-            } else {
-        
-                return console.log("Tech, not found. Check if you not misspelled.", selected)
+
+            } catch(error) {
+
+                console.log(error)
+
+                return "Tech not found"
             }
+
         }
-}
+    }
