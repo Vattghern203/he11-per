@@ -1,16 +1,21 @@
+const { axios } = require("axios")
+
 module.exports.getPokemonData = 
 
 async function getPokemonData (pokemon) {
+
+    const toArray = []
+
     try {
 
-        await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemon}`)
-                .then(res => (res.json()))
-                .then((data) => {
-    
-                    console.log(data)
+       const url = `https://pokeapi.co/api/v2/pokemon/${pokemon}`
+       const res = await axios.get(url)
 
-                    return data.name.toString()
-                })
+       toArray.push(res.data)
+
+       console.log(toArray)
+
+       return toArray.name
 
     } catch(err) {
 

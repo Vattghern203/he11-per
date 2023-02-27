@@ -1,6 +1,7 @@
 const { SlashCommandBuilder} = require('discord.js')
 
 const { getPokemonData } = require("../handlers/pokemonHandler")
+const { pokeAPI } = require("../functions/pokeAPI")
 
 module.exports = {
  
@@ -16,9 +17,7 @@ module.exports = {
     async execute(interaction) {
 
         const pokemonName = interaction.options.getString('pokemon')
-
-        console.log()
     
-        await interaction.reply(getPokemonData(pokemonName))
+        await interaction.deferReply(pokeAPI(pokemonName))
     }
 }
