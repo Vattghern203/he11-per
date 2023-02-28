@@ -11,10 +11,6 @@ module.exports.pokeAPI =
                     .then((data) => {
     
                         console.log(`fetched data: ${data}`)
-
-                        pokeData.push(data)
-
-                        console.log(`Parsed data: ${pokeData}`)
                     })
 
         } catch(error) {
